@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Tailwind v4 is CSS-first — dark mode defaults to prefers-color-scheme.
+   This switches it to a manual, class-based toggle: dark:* utilities apply
+   whenever a `dark` class is present up the tree. ThemeContext.jsx toggles
+   this class on <html> and persists the choice to localStorage. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
