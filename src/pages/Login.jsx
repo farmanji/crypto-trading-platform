@@ -27,7 +27,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
+    <main className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
       {/* Visual Branding Side (Hidden on Mobile) */}
       <div className="hidden relative flex-1 flex-col justify-between p-12 bg-linear-to-b from-slate-100 via-slate-200 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 lg:flex select-none overflow-hidden">
         {/* Brand Logo */}
@@ -52,7 +52,7 @@ export default function Login() {
         </div>
 
         {/* Footer Meta */}
-        <div className="text-xs text-slate-400 dark:text-slate-500 tracking-wide">
+        <div className="text-xs text-slate-600 dark:text-slate-400 tracking-wide">
           © 2026 CryptoX. Trusted by 40,000+ traders.
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function Login() {
           {/* Divider */}
           <div className="flex items-center my-6">
             <div className="flex-1 border-t border-slate-200 dark:border-slate-800/80"></div>
-            <span className="px-3 text-xs font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+            <span className="px-3 text-xs font-bold tracking-widest text-slate-600 dark:text-slate-400 uppercase">
               OR
             </span>
             <div className="flex-1 border-t border-slate-200 dark:border-slate-800/80"></div>
@@ -169,6 +169,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

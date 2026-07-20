@@ -33,7 +33,7 @@ export default function Signup() {
  
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
+    <main>
       
       {/* Visual Branding Side (Hidden on Mobile) */}
       <div className="hidden relative flex-1 flex-col justify-between p-12 bg-linear-to-b from-slate-100 via-slate-200 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 lg:flex select-none overflow-hidden">
@@ -59,7 +59,7 @@ export default function Signup() {
         </div>
 
         {/* Footer Security Highlights */}
-        <div className="text-xs text-slate-400 dark:text-slate-500 tracking-wide flex items-center gap-2 divide-x divide-slate-300 dark:divide-slate-800">
+        <div className="text-xs text-slate-600 dark:text-slate-400 tracking-wide flex items-center gap-2 divide-x divide-slate-300 dark:divide-slate-800">
           <span>Bank-grade security</span>
           <span className="pl-2">KYC verified</span>
           <span className="pl-2">24/7 support</span>
@@ -180,6 +180,6 @@ export default function Signup() {
         </div>
       </div>
 
-    </div>
+    </main>
   );
 }
