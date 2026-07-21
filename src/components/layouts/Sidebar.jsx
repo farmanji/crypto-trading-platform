@@ -126,9 +126,9 @@ export default function Sidebar() {
             </div>
             <div className="min-w-0">
               <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                {user?.name || user?.email || 'Guest'}
+                {user?.fullName || user?.email || 'Guest'}
               </div>
-              {user?.kycVerified ? (
+              {!user?.kycVerified ? (
                 <div className="text-[11px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
                   Verified · KYC ✓
                 </div>

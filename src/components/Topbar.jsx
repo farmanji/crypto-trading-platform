@@ -263,7 +263,7 @@ export default function Topbar() {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{user?.name || 'Your Account'}</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{user?.fullName || 'Your Account'}</p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email || 'Not signed in'}</p>
                   </div>
                 </div>

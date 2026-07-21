@@ -1,31 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import candle from "../assets/candle.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import backendApi from '../api/backendApi';
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+const location = useLocation();
+
+  useEffect(() => {
+  if (location.state?.message) {
+    toast.success(location.state.message);
+  }
+}, [location.state]);
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-   const userData = {
-          user:{
-          email:email
-          },
-          token:"dummy-token-123"
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-}
+  try {
+    const res = await backendApi.post("/auth/login", {
+      email,
+      password
+    });
+
+    const userData = {
+      user: res.data.user,
+      token: res.data.token
+    };
+
+    // redux store update
     dispatch(login(userData));
-    localStorage.setItem('token',userData.token);
-    navigate('/')
-  };
 
+    // token save
+    localStorage.setItem("token", res.data.token);
+    toast.success(res.data.message);
+    navigate("/");
+  } catch (error) {
+    toast.error(
+  error.response?.data?.message || "Login failed"
+);
+
+  }
+};
   return (
     <main className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
       {/* Visual Branding Side (Hidden on Mobile) */}

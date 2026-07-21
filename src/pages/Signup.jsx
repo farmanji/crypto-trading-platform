@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import candle from "../assets/candle.jpg";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import backendApi from '../api/backendApi';
+import toast from 'react-hot-toast';
+
+
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -10,6 +14,7 @@ export default function Signup() {
     confirmPassword: '',
     agreeToTerms: false
   });
+const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -19,15 +24,40 @@ export default function Signup() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    // TODO: wire up to a real signup flow once the backend exists (see authSlice/login for the pattern Login.jsx already uses)
-    console.log('Registering user with:', formData);
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (formData.password !== formData.confirmPassword) {
+    toast.error("Passwords do not match!");
+    return;
+  }
+
+  try {
+    const res = await backendApi.post("/auth/signup", {
+      fullName: formData.fullName,
+      email: formData.email,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+       isTermsAccepted: formData.agreeToTerms
+    });
+
+    toast.success(res.data.message || "Account created successfully!");
+
+    setFormData({
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      agreeToTerms: false,
+    });
+
+    setTimeout(() => {
+    navigate("/login");
+      }, 1500);
+  } catch (error) {
+      toast.error(error.response?.data?.message || "Signup failed");
+  }
+};
 
  
  

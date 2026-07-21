@@ -32,7 +32,7 @@ export default function Settings() {
           )}
         </div>
         <div className="min-w-0">
-          <p className="font-semibold truncate">{user?.name || 'Your Account'}</p>
+          <p className="font-semibold truncate">{user?.fullName || 'Your Account'}</p>
           <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{user?.email || 'Not signed in'}</p>
         </div>
       </section>
