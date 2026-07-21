@@ -2,14 +2,16 @@ import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import './index.css';
 import App from './App.jsx';
 import { persistor, store } from './app/store.js';
 import { ThemeProvider } from './context/ThemeContext.jsx';
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
+  <GoogleOAuthProvider clientId={googleClientId}>  <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <ThemeProvider>
         <Toaster
@@ -23,4 +25,6 @@ createRoot(document.getElementById('root')).render(
       </ThemeProvider>
     </PersistGate>
   </Provider>
+  </GoogleOAuthProvider>
+
 );

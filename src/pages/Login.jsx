@@ -5,12 +5,35 @@ import { useDispatch } from "react-redux";
 import { login } from "../features/auth/authSlice";
 import backendApi from '../api/backendApi';
 import toast from "react-hot-toast";
+import { useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
 const location = useLocation();
+
+import { useGoogleLogin } from '@react-oauth/google';
+
+// google button handler
+const handleGoogleLogin = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    try {
+      const res = await backendApi.post("/auth/google", {
+        access_token: tokenResponse.access_token,
+      });
+
+      const userData = { user: res.data.user, token: res.data.token };
+      dispatch(login(userData));
+      localStorage.setItem("token", res.data.token);
+      toast.success(res.data.message || "Logged in with Google");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Google login failed");
+    }
+  },
+  onError: () => toast.error("Google login failed"),
+});
 
   useEffect(() => {
   if (location.state?.message) {
@@ -155,6 +178,7 @@ const location = useLocation();
 
           {/* OAuth Secondary Button */}
           <button
+          onClick={() => handleGoogleLogin()}
             type="button"
             className="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 text-slate-700 dark:text-slate-200 font-medium py-3 px-4 rounded-lg active:scale-[0.99] transition-all cursor-pointer text-sm"
           >
