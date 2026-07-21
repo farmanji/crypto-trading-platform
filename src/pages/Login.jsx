@@ -1,3 +1,4 @@
+import { useGoogleLogin } from '@react-oauth/google';
 import React, { useState, useEffect } from "react";
 import candle from "../assets/candle.jpg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -5,73 +6,67 @@ import { useDispatch } from "react-redux";
 import { login } from "../features/auth/authSlice";
 import backendApi from '../api/backendApi';
 import toast from "react-hot-toast";
-import { useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-const location = useLocation();
 
-import { useGoogleLogin } from '@react-oauth/google';
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-// google button handler
-const handleGoogleLogin = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
-    try {
-      const res = await backendApi.post("/auth/google", {
-        access_token: tokenResponse.access_token,
-      });
+  // google button handler
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await backendApi.post("/auth/google", {
+          access_token: tokenResponse.access_token,
+        });
 
-      const userData = { user: res.data.user, token: res.data.token };
-      dispatch(login(userData));
-      localStorage.setItem("token", res.data.token);
-      toast.success(res.data.message || "Logged in with Google");
-      navigate("/");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Google login failed");
-    }
-  },
-  onError: () => toast.error("Google login failed"),
-});
+        const userData = { user: res.data.user, token: res.data.token };
+        dispatch(login(userData));
+        localStorage.setItem("token", res.data.token);
+        toast.success(res.data.message || "Logged in with Google");
+        navigate("/");
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Google login failed");
+      }
+    },
+    onError: () => toast.error("Google login failed"),
+  });
 
   useEffect(() => {
-  if (location.state?.message) {
-    toast.success(location.state.message);
-  }
-}, [location.state]);
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+    if (location.state?.message) {
+      toast.success(location.state.message);
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await backendApi.post("/auth/login", {
-      email,
-      password
-    });
+    try {
+      const res = await backendApi.post("/auth/login", {
+        email,
+        password
+      });
 
-    const userData = {
-      user: res.data.user,
-      token: res.data.token
-    };
+      const userData = {
+        user: res.data.user,
+        token: res.data.token
+      };
 
-    // redux store update
-    dispatch(login(userData));
+      dispatch(login(userData));
+      localStorage.setItem("token", res.data.token);
+      toast.success(res.data.message);
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Login failed"
+      );
+    }
+  };
 
-    // token save
-    localStorage.setItem("token", res.data.token);
-    toast.success(res.data.message);
-    navigate("/");
-  } catch (error) {
-    toast.error(
-  error.response?.data?.message || "Login failed"
-);
-
-  }
-};
+ 
   return (
     <main className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
       {/* Visual Branding Side (Hidden on Mobile) */}
