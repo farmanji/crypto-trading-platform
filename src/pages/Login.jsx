@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -41,30 +42,38 @@ export default function Login() {
     }
   }, [location.state]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const res = await backendApi.post("/auth/login", {
-        email,
-        password
-      });
+  try {
+    setLoading(true);
 
-      const userData = {
-        user: res.data.user,
-        token: res.data.token
-      };
+    const res = await backendApi.post("/auth/login", {
+      email,
+      password
+    });
 
-      dispatch(login(userData));
-      localStorage.setItem("token", res.data.token);
-      toast.success(res.data.message);
-      navigate("/");
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Login failed"
-      );
-    }
-  };
+    const userData = {
+      user: res.data.user,
+      token: res.data.token
+    };
+
+    dispatch(login(userData));
+    localStorage.setItem("token", res.data.token);
+
+    toast.success(res.data.message);
+    navigate("/");
+
+  } catch (error) {
+
+    toast.error(
+      error.response?.data?.message || "Login failed"
+    );
+
+  } finally {
+    setLoading(false);
+  }
+};
 
  
   return (
@@ -157,11 +166,21 @@ export default function Login() {
             </div>
 
             {/* Primary Submit Button */}
-            <button
+           <button
               type="submit"
-              className="w-full bg-linear-to-r from-amber-400 to-amber-500 text-slate-950 font-semibold py-3 px-4 rounded-lg shadow-md shadow-amber-500/10 hover:from-amber-300 hover:to-amber-400 active:scale-[0.99] transition-all cursor-pointer text-sm"
+              disabled={loading}
+              className={`w-full bg-linear-to-r from-amber-400 to-amber-500 text-slate-950 font-semibold py-3 px-4 rounded-lg shadow-md transition-all cursor-pointer text-sm ${
+                loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Log In
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></span>
+                  Logging in...
+                </span>
+              ) : (
+                "Log In"
+              )}
             </button>
           </form>
 
