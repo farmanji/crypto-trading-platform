@@ -109,6 +109,9 @@ export default function Login() {
             <p className="text-sm text-slate-500 dark:text-slate-400">
               Log in to access your portfolio
             </p>
+            <h3>Dummy Login</h3>
+            <p><strong>Email: </strong> test@example.com</p>
+            <p><strong>Password: </strong> mmm123123</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">

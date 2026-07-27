@@ -3,12 +3,22 @@ import { createRoot } from 'react-dom/client';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { registerSW } from "virtual:pwa-register";
 
 import './index.css';
 import App from './App.jsx';
 import { persistor, store } from './app/store.js';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    console.log("New content available");
+  },
+  onOfflineReady() {
+    console.log("App ready offline");
+  },
+});
 
 createRoot(document.getElementById('root')).render(
   <GoogleOAuthProvider clientId={googleClientId}>  <Provider store={store}>
